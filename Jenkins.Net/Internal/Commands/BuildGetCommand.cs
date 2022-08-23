@@ -31,8 +31,9 @@ namespace JenkinsNET.Internal.Commands
             OnRead = response => {
                 var document = ReadXml(response);
 
-                var args = new object[] {document.Root};
-                Result = Activator.CreateInstance(typeof(T), args) as T;
+                //var args = new object[] {document.Root};
+                //Result = Activator.CreateInstance(typeof(T), args) as T;
+                Result = Activator.CreateInstance(typeof(T), document.Root) as T;
             };
 
         #if NET_ASYNC
@@ -43,8 +44,9 @@ namespace JenkinsNET.Internal.Commands
             OnReadAsync = async (response, token) => {
                 var document = await ReadXmlAsync(response);
 
-                var args = new object[] {document.Root};
-                Result = Activator.CreateInstance(typeof(T), args) as T;
+                //var args = new object[] {document.Root};
+                //Result = Activator.CreateInstance(typeof(T), args) as T;
+                Result = Activator.CreateInstance(typeof(T), document.Root) as T;
             };
         #endif
         }

@@ -14,6 +14,6 @@ namespace JenkinsNET.Models
         //public string[] ChangeSet => Node?.Wrap<string>("changeSet");
 
 
-        internal JenkinsFreeStyleBuild(XNode node) : base(node) {}
+        public JenkinsFreeStyleBuild(XNode node) : base(node) {}
     }
 }

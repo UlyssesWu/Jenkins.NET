@@ -19,6 +19,6 @@ namespace JenkinsNET.Models
         public JenkinsBuildDescription NextBuild => Node?.Wrap("nextBuild", n => new JenkinsBuildDescription(n));
 
 
-        internal JenkinsWorkflowBuild(XNode node) : base(node) {}
+        public JenkinsWorkflowBuild(XNode node) : base(node) {}
     }
 }
