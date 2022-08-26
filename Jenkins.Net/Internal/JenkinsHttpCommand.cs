@@ -95,6 +95,16 @@ namespace JenkinsNET.Internal
             }
         }
 
+        protected string ReadString(HttpWebResponse response)
+        {
+            using var stream = response.GetResponseStream();
+            if (stream == null) return null;
+
+            using var reader = new StreamReader(stream);
+            var xml = reader.ReadToEnd();
+            return xml;
+        }
+
         protected void WriteXml(HttpWebRequest request, XNode node)
         {
             var xmlSettings = new XmlWriterSettings {
@@ -120,6 +130,16 @@ namespace JenkinsNET.Internal
                     return XDocument.Parse(xml);
                 }
             }
+        }
+
+        protected async Task<string> ReadStringAsync(HttpWebResponse response)
+        {
+            using var stream = response.GetResponseStream();
+            if (stream == null) return null;
+
+            using var reader = new StreamReader(stream);
+            var xml = await reader.ReadToEndAsync();
+            return xml;
         }
 
         protected async Task WriteXmlAsync(HttpWebRequest request, XNode node, CancellationToken token = default)

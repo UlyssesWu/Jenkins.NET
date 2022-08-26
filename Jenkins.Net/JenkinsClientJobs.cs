@@ -122,13 +122,12 @@ namespace JenkinsNET
         /// Gets a Job description from Jenkins asynchronously.
         /// </summary>
         /// <param name="jobName">The Name of the Job to retrieve.</param>
-        /// <param name="getAll">Get all builds if true; get first 100 builds if false.</param>
         /// <param name="token">An optional token for aborting the request.</param>
         /// <exception cref="JenkinsNetException"></exception>
-        public async Task<T> GetAsync<T>(string jobName, bool getAll = false, CancellationToken token = default) where T : class, IJenkinsJob
+        public async Task<T> GetAsync<T>(string jobName, CancellationToken token = default) where T : class, IJenkinsJob
         {
             try {
-                var cmd = new JobGetCommand<T>(context, jobName, getAll);
+                var cmd = new JobGetCommand<T>(context, jobName);
                 await cmd.RunAsync(token);
                 return cmd.Result;
             }
@@ -136,7 +135,32 @@ namespace JenkinsNET
                 throw new JenkinsNetException($"Failed to get Jenkins Job '{jobName}'!", error);
             }
         }
-    #endif
+
+        /// <summary>
+        /// Get all builds of a Job
+        /// </summary>
+        /// <param name="jobName"></param>
+        /// <param name="beginIndex"></param>
+        /// <param name="endIndex"></param>
+        /// <param name="requiredFields"></param>
+        /// <param name="token"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        /// <exception cref="JenkinsNetException"></exception>
+        public async Task<freeStyleProject> GetAllBuildsAsync(string jobName, int beginIndex = 0, int endIndex = 200, string requiredFields = "*", CancellationToken token = default)
+        {
+            try
+            {
+                var cmd = new JobGetAllBuildsCommand(context, jobName, requiredFields, beginIndex, endIndex);
+                await cmd.RunAsync(token);
+                return cmd.Result;
+            }
+            catch (Exception error)
+            {
+                throw new JenkinsNetException($"Failed to get Jenkins Job '{jobName}'!", error);
+            }
+        }
+#endif
 
         /// <summary>
         /// Gets a Job configuration from Jenkins.

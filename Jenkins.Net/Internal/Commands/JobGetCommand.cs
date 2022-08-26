@@ -8,7 +8,7 @@ namespace JenkinsNET.Internal.Commands
         public T Result {get; private set;}
 
 
-        public JobGetCommand(IJenkinsContext context, string jobName, bool getAllBuilds = false)
+        public JobGetCommand(IJenkinsContext context, string jobName)
         {
             if (context == null)
                 throw new ArgumentNullException(nameof(context));
@@ -16,8 +16,7 @@ namespace JenkinsNET.Internal.Commands
             if (string.IsNullOrEmpty(jobName))
                 throw new ArgumentException("Value cannot be empty!", nameof(jobName));
 
-            Url = getAllBuilds? NetPath.Combine(context.BaseUrl, "job", jobName, "api/xml?tree=allBuilds[number,url]")
-                : NetPath.Combine(context.BaseUrl, "job", jobName, "api/xml");
+            Url = NetPath.Combine(context.BaseUrl, "job", jobName, "api/xml");
 
             UserName = context.UserName;
             ApiToken = context.ApiToken;
