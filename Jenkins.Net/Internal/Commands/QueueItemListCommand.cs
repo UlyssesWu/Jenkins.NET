@@ -18,7 +18,7 @@ namespace JenkinsNET.Internal.Commands
 
             Url = NetPath.Combine(context.BaseUrl, "queue/api/xml");
             UserName = context.UserName;
-            Password = context.Password;
+            ApiToken = context.ApiToken;
             Crumb = context.Crumb;
 
             OnWrite = request => {

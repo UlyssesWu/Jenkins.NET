@@ -20,16 +20,10 @@ namespace JenkinsNET
         string UserName {get;}
 
         /// <summary>
-        /// [optional] Jenkins Password.
-        /// </summary>
-        [Obsolete("This property will be removed in future versions; please use 'JenkinsContext.ApiToken' instead.")]
-        string Password {get;}
-
-        /// <summary>
         /// [optional] Jenkins ApiToken for the <see cref="UserName"/>.
         /// </summary>
-        string ApiToken {get; set;}
-
+        string ApiToken {get; set; }
+        
         /// <summary>
         /// [optional] Jenkins CSRF Crumb.
         /// </summary>

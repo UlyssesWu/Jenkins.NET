@@ -122,12 +122,13 @@ namespace JenkinsNET
         /// Gets a Job description from Jenkins asynchronously.
         /// </summary>
         /// <param name="jobName">The Name of the Job to retrieve.</param>
+        /// <param name="getAll">Get all builds if true; get first 100 builds if false.</param>
         /// <param name="token">An optional token for aborting the request.</param>
         /// <exception cref="JenkinsNetException"></exception>
-        public async Task<T> GetAsync<T>(string jobName, CancellationToken token = default) where T : class, IJenkinsJob
+        public async Task<T> GetAsync<T>(string jobName, bool getAll = false, CancellationToken token = default) where T : class, IJenkinsJob
         {
             try {
-                var cmd = new JobGetCommand<T>(context, jobName);
+                var cmd = new JobGetCommand<T>(context, jobName, getAll);
                 await cmd.RunAsync(token);
                 return cmd.Result;
             }

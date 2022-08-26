@@ -20,7 +20,7 @@ namespace JenkinsNET.Internal.Commands
                 + NetPath.Query(new {name = jobName});
 
             UserName = context.UserName;
-            Password = context.Password;
+            ApiToken = context.ApiToken;
             Crumb = context.Crumb;
 
             OnWrite = request => {

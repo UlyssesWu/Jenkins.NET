@@ -18,7 +18,7 @@ namespace JenkinsNET.Internal
     {
         public string Url {get; set;}
         public string UserName {get; set;}
-        public string Password {get; set;}
+        public string ApiToken {get; set;}
         public JenkinsCrumb Crumb {get; set;}
         public Action<HttpWebRequest> OnWrite {get; set;}
         public Action<HttpWebResponse> OnRead {get; set;}
@@ -60,7 +60,7 @@ namespace JenkinsNET.Internal
         {
             var _url = Url;
             var hasUser = !string.IsNullOrEmpty(UserName);
-            var hasPass = !string.IsNullOrEmpty(Password);
+            var hasPass = !string.IsNullOrEmpty(ApiToken);
 
             var request = (HttpWebRequest)WebRequest.Create(_url);
             request.UserAgent = "Jenkins.NET Client";
@@ -74,7 +74,7 @@ namespace JenkinsNET.Internal
                 request.PreAuthenticate = true;
                 request.UseDefaultCredentials = false;
 
-                var data = Encoding.UTF8.GetBytes($"{UserName}:{Password}");
+                var data = Encoding.UTF8.GetBytes($"{UserName}:{ApiToken}");
                 var basicAuthToken = Convert.ToBase64String(data);
                 request.Headers["Authorization"] = $"Basic {basicAuthToken}";
             }
