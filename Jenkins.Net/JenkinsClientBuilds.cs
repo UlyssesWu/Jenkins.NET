@@ -2,6 +2,7 @@
 using JenkinsNET.Internal.Commands;
 using JenkinsNET.Models;
 using System;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -220,6 +221,66 @@ namespace JenkinsNET
                 throw new JenkinsNetException($"Failed to retrieve progressive HTML from build #{buildNumber} of Jenkins Job '{jobName}'!", error);
             }
         }
-    #endif
+
+
+        /// <summary>
+        /// Stop a running build
+        /// </summary>
+        /// <param name="jobName"></param>
+        /// <param name="buildNumber"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public async Task<bool> StopBuildAsync(string jobName, string buildNumber, CancellationToken token = default)
+        {
+            try
+            {
+                var cmd = new BuildStopCommand(context, jobName, buildNumber);
+                await cmd.RunAsync(token);
+                return cmd.Result;
+            }
+            catch (WebException webException)
+            {
+                if (webException.Message.Contains("(403) Forbidden")) //WTF, it returns 403 but still does the job
+                {
+                    return true;
+                }
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+
+            return false;
+        }
+#endif
+        /// <summary>
+        /// Stop a running build
+        /// </summary>
+        /// <param name="jobName"></param>
+        /// <param name="buildNumber"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public bool StopBuild(string jobName, string buildNumber)
+        {
+            try
+            {
+                var cmd = new BuildStopCommand(context, jobName, buildNumber);
+                cmd.Run();
+                return cmd.Result;
+            }
+            catch (WebException webException)
+            {
+                if (webException.Message.Contains("(403) Forbidden")) //WTF, it returns 403 but still does the job
+                {
+                    return true;
+                }
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+
+            return false;
+        }
     }
 }
