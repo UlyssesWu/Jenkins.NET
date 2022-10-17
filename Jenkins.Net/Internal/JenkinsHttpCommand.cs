@@ -41,9 +41,14 @@ namespace JenkinsNET.Internal
         }
 
     #if NET_ASYNC
-        public async Task RunAsync(CancellationToken token = default)
+        public async Task RunAsync(CancellationToken token = default, int timeout = -1)
         {
             var request = CreateRequest();
+
+            if (timeout > 0)
+            {
+                request.Timeout = timeout;
+            }
 
             if (OnWriteAsync != null) await OnWriteAsync.Invoke(request, token);
 

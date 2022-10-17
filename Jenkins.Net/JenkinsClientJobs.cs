@@ -143,16 +143,17 @@ namespace JenkinsNET
         /// <param name="beginIndex"></param>
         /// <param name="endIndex"></param>
         /// <param name="requiredFields"></param>
+        /// <param name="timeout">Timeout in ms</param>
         /// <param name="token"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         /// <exception cref="JenkinsNetException"></exception>
-        public async Task<freeStyleProject> GetAllBuildsAsync(string jobName, int beginIndex = 0, int endIndex = 200, string requiredFields = "*", CancellationToken token = default)
+        public async Task<freeStyleProject> GetAllBuildsAsync(string jobName, int beginIndex = 0, int endIndex = 200, string requiredFields = "*", int timeout = 60000, CancellationToken token = default)
         {
             try
             {
                 var cmd = new JobGetAllBuildsCommand(context, jobName, requiredFields, beginIndex, endIndex);
-                await cmd.RunAsync(token);
+                await cmd.RunAsync(token, timeout);
                 return cmd.Result;
             }
             catch (Exception error)

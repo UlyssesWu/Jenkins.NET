@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Net;
+using System.Web;
 
 namespace JenkinsNET.Internal.Commands
 {
-    internal class BuildStopCommand : JenkinsHttpCommand
+    internal class BuildSetDescriptionCommand : JenkinsHttpCommand
     {
         public bool Result { get; private set; } = true;
-        public BuildStopCommand(IJenkinsContext context, string jobName, string buildNumber)
+        public BuildSetDescriptionCommand(IJenkinsContext context, string jobName, string buildNumber, string description)
         {
             if (context == null)
                 throw new ArgumentNullException(nameof(context));
@@ -27,13 +28,15 @@ namespace JenkinsNET.Internal.Commands
                 }
             }
 
+            var descParameter = $"submitDescription?description={HttpUtility.UrlEncode(description)}";
+
             if (useDirectUrl)
             {
-                Url = NetPath.Combine(jobName, "stop");
+                Url = NetPath.Combine(jobName, descParameter);
             }
             else
             {
-                Url = NetPath.Combine(context.BaseUrl, "job", jobName, buildNumber, "stop");
+                Url = NetPath.Combine(context.BaseUrl, "job", jobName, buildNumber, descParameter);
             }
 
             UserName = context.UserName;

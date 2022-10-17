@@ -226,7 +226,7 @@ namespace JenkinsNET
         /// <summary>
         /// Stop a running build
         /// </summary>
-        /// <param name="jobName"></param>
+        /// <param name="jobName">You can use a job url and set <paramref name="buildNumber"/> to null</param>
         /// <param name="buildNumber"></param>
         /// <param name="token"></param>
         /// <returns></returns>
@@ -252,13 +252,44 @@ namespace JenkinsNET
 
             return false;
         }
+
+        /// <summary>
+        /// Set description for a build
+        /// </summary>
+        /// <param name="jobName"></param>
+        /// <param name="buildNumber"></param>
+        /// <param name="description"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public async Task<bool> SetBuildDescriptionAsync(string jobName, string buildNumber, string description,
+            CancellationToken token = default)
+        {
+            try
+            {
+                var cmd = new BuildSetDescriptionCommand(context, jobName, buildNumber, description);
+                await cmd.RunAsync(token);
+                return cmd.Result;
+            }
+            catch (WebException webException)
+            {
+                if (webException.Message.Contains("(403) Forbidden")) //WTF, it returns 403 but still does the job
+                {
+                    return true;
+                }
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+
+            return false;
+        }
 #endif
         /// <summary>
         /// Stop a running build
         /// </summary>
         /// <param name="jobName"></param>
         /// <param name="buildNumber"></param>
-        /// <param name="token"></param>
         /// <returns></returns>
         public bool StopBuild(string jobName, string buildNumber)
         {
