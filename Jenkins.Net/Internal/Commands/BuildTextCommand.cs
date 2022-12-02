@@ -17,10 +17,28 @@ namespace JenkinsNET.Internal.Commands
             if (string.IsNullOrEmpty(jobName))
                 throw new ArgumentException("'jobName' cannot be empty!");
 
+            bool useDirectUrl = false;
             if (string.IsNullOrEmpty(buildNumber))
-                throw new ArgumentException("'buildNumber' cannot be empty!");
+            {
+                if (jobName.StartsWith("http://") || jobName.StartsWith("https://"))
+                {
+                    useDirectUrl = true;
+                }
+                else
+                {
+                    throw new ArgumentException("'buildNumber' cannot be empty!");
+                }
+            }
 
-            Url = NetPath.Combine(context.BaseUrl, "job", jobName, buildNumber, "consoleText");
+            if (useDirectUrl)
+            {
+                Url = NetPath.Combine(jobName, "consoleText");
+            }
+            else
+            {
+                Url = NetPath.Combine(context.BaseUrl, "job", jobName, buildNumber, "consoleText");
+            }
+
             UserName = context.UserName;
             ApiToken = context.ApiToken;
             Crumb = context.Crumb;
@@ -29,7 +47,7 @@ namespace JenkinsNET.Internal.Commands
                 using (var stream = response.GetResponseStream()) {
                     if (stream == null) return;
 
-                    var encoding = TryGetEncoding(response.ContentEncoding, Encoding.UTF8);
+                    var encoding = string.IsNullOrEmpty(response.ContentEncoding) ? Encoding.UTF8 : TryGetEncoding(response.ContentEncoding, Encoding.UTF8);
                     using (var reader = new StreamReader(stream, encoding)) {
                         Result = reader.ReadToEnd();
                     }
@@ -41,7 +59,7 @@ namespace JenkinsNET.Internal.Commands
                 using (var stream = response.GetResponseStream()) {
                     if (stream == null) return;
 
-                    var encoding = TryGetEncoding(response.ContentEncoding, Encoding.UTF8);
+                    var encoding = string.IsNullOrEmpty(response.ContentEncoding)? Encoding.UTF8 : TryGetEncoding(response.ContentEncoding, Encoding.UTF8);
                     Result = await stream.ReadToEndAsync(encoding, token);
                 }
             };
