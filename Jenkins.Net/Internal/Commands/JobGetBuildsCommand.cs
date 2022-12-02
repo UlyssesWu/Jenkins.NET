@@ -5,13 +5,13 @@ using JenkinsNET.Models;
 
 namespace JenkinsNET.Internal.Commands
 {
-    internal class JobGetAllBuildsCommand : JenkinsHttpCommand
+    internal class JobGetBuildsCommand : JenkinsHttpCommand
     {
         public freeStyleProject Result { get; private set; }
 
 
-        public JobGetAllBuildsCommand(IJenkinsContext context, string jobName, string requiredFields = "*", int beginIndex = 0,
-            int endIndex = 200)
+        public JobGetBuildsCommand(IJenkinsContext context, string jobName, string requiredFields = "*", int beginIndex = 0,
+            int endIndex = 100)
         {
             if (context == null)
                 throw new ArgumentNullException(nameof(context));
@@ -20,7 +20,7 @@ namespace JenkinsNET.Internal.Commands
                 throw new ArgumentException("Value cannot be empty!", nameof(jobName));
 
             Url = NetPath.Combine(context.BaseUrl, "job", jobName,
-                $"api/xml?tree=allBuilds[{requiredFields}]{{{beginIndex},{endIndex}}}&depth=1");
+                $"api/xml?tree=builds[{requiredFields}]{{{beginIndex},{endIndex}}}&depth=1");
 
             UserName = context.UserName;
             ApiToken = context.ApiToken;

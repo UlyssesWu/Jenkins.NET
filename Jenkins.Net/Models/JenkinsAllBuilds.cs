@@ -9,23 +9,14 @@
     [System.Xml.Serialization.XmlRootAttribute(Namespace = "", IsNullable = false)]
     public partial class freeStyleProject
     {
-        private freeStyleProjectAllBuild[] allBuildField;
-
         private string _classField;
 
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("allBuild")]
-        public freeStyleProjectAllBuild[] allBuild
-        {
-            get
-            {
-                return this.allBuildField;
-            }
-            set
-            {
-                this.allBuildField = value;
-            }
-        }
+        public freeStyleProjectBuild[] allBuild { get; set; }
+
+        [System.Xml.Serialization.XmlElementAttribute("build")]
+        public freeStyleProjectBuild[] build { get; set; }
 
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
@@ -46,10 +37,10 @@
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-    public partial class freeStyleProjectAllBuild
+    public partial class freeStyleProjectBuild
     {
 
-        private freeStyleProjectAllBuildAction[] actionField;
+        private freeStyleProjectBuildAction[] actionField;
 
         private bool buildingField;
 
@@ -63,11 +54,11 @@
 
         private string fullDisplayNameField;
 
-        private ushort idField;
+        private int idField;
 
         private bool keepLogField;
 
-        private ushort numberField;
+        private int numberField;
 
         private uint queueIdField;
 
@@ -79,13 +70,13 @@
 
         private string builtOnField;
 
-        private freeStyleProjectAllBuildChangeSet changeSetField;
+        private freeStyleProjectBuildChangeSet changeSetField;
 
         private string _classField;
 
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("action")]
-        public freeStyleProjectAllBuildAction[] action
+        public freeStyleProjectBuildAction[] action
         {
             get
             {
@@ -176,7 +167,7 @@
         }
 
         /// <remarks/>
-        public ushort id
+        public int id
         {
             get
             {
@@ -202,7 +193,7 @@
         }
 
         /// <remarks/>
-        public ushort number
+        public int number
         {
             get
             {
@@ -280,7 +271,7 @@
         }
 
         /// <remarks/>
-        public freeStyleProjectAllBuildChangeSet changeSet
+        public freeStyleProjectBuildChangeSet changeSet
         {
             get
             {
@@ -311,7 +302,7 @@
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-    public partial class freeStyleProjectAllBuildAction
+    public partial class freeStyleProjectBuildAction
     {
 
         private string _classField;
@@ -335,7 +326,7 @@
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-    public partial class freeStyleProjectAllBuildChangeSet
+    public partial class freeStyleProjectBuildChangeSet
     {
 
         private string _classField;
